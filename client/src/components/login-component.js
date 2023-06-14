@@ -18,11 +18,14 @@ export const LoginComponent = ({ setCurrentUser }) => {
     e.preventDefault();
     try {
       let response = await AuthService.login(username, password);
-      console.log(response);
-      localStorage.setItem("user", JSON.stringify(response.data));
-      window.alert("登入成功，即將被導向至首頁");
-      setCurrentUser(AuthService.getCurrentUserFromLocalStorage());
-      navigate("/");
+      if (response.data == "No User Exists") {
+        setMessage(response.data);
+      } else {
+        localStorage.setItem("user", JSON.stringify(response.data));
+        window.alert("登入成功，即將被導向至首頁");
+        setCurrentUser(AuthService.getCurrentUserFromLocalStorage());
+        navigate("/");
+      }
     } catch (e) {
       setMessage(e.response.data);
     }
